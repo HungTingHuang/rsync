@@ -1,10 +1,17 @@
 #!/bin/bash
 
-
 PATTERM=$1
 SRC_FOLDER=$2
 DST_FOLDER=$3
 
+#color
+tput_red=`tput setaf 1`
+tput_green=`tput setaf 2`
+tput_yellow=`tput setaf 3`
+tput_blue=`tput setaf 4`
+tput_purple=`tput setaf 5`
+tput_skyblue=`tput setaf 6`
+tput_reset=`tput sgr0`
 #Usage:
 #
 #
@@ -13,39 +20,39 @@ DST_FOLDER=$3
 #
 
 if [ -z $PATTERM ]; then 
-    echo -e "\e[31m$PATTERM is NULL string\e[0m"
+    printf "${tput_red}$PATTERM is NULL string${tput_reset}\n"
     exit 1
 else
-    echo -e "\e[95mPATTERM:\e[0m\t\t\t $PATTERM"
+    printf "${tput_purple}PATTERM:${tput_reset}\t\t\t $PATTERM\n"
 fi
 
 
-if [ ! -d $SRC_FOLDER ]; then
-    echo -e "\e[31m$SRC_FOLDER is missing\e[0m"
+if [ ! -e $SRC_FOLDER ] || [ ! -d $SRC_FOLDER ]; then
+    printf "${tput_red}${DST_FOLDER} is missing${tput_reset}\n"
     exit 1
 else
-    echo -e "\e[95mSOURCE FOLDER:\e[0m\t\t\t $SRC_FOLDER"
+    printf "${tput_purple}SOURCE FOLDER:${tput_reset}\t\t\t $SRC_FOLDER\n"
 fi
 
-if [ ! -d $DST_FOLDER ]; then
-    echo -e "\e[31m$DST_FOLDER is missing\e[0m"
+if [ ! -e $DST_FOLDER ] || [ ! -d $DST_FOLDER ]; then
+    echo -e "${tput_red}$DST_FOLDER is missing${tput_reset}\n"
     exit 1
 else
-    echo -e "\e[95mDESTINATION FOLDER:\e[0m\t\t $DST_FOLDER"
+    printf "${tput_purple}DESTINATION FOLDER:${tput_reset}\t\t $DST_FOLDER\n"
 fi
 
 function ProgressBar {
 # Process data
-    let _progress=(${1}*100/${2}*100)/100
-    let _done=(${_progress}*4)/10
-    let _left=40-$_done
+    local _progress=(${1}*100/${2}*100)/100
+    local _done=(${_progress}*4)/10
+    local _left=40-$_done
 # Build progressbar string lengths
     _fill=$(printf "%${_done}s")
     _empty=$(printf "%${_left}s")
 
 # 1.2 Build progressbar strings and print the ProgressBar line
 # 1.2.1 Output example:                           
-# 1.2.1.1 Progress : [########################################] 100%
+# 1.2.1.1 Progress : [########################################] 100%ls
 printf "\n\r${_fill// /\#}${_empty// /-}  ${1}/${2} ${_progress}%%\n\r"
 
 }
@@ -65,12 +72,12 @@ for file in $list; do
         create_folder=$DST_FOLDER${source_folder#*/}
         if [ ! -e $create_folder ]; then
 #if target folder is NOt exist, then CRATE folder
-            mkdir -p $create_folder
-            echo -e "\e[31mMKDIR\e[0m $create_folder"
+            `which mkdir` -p $create_folder
+            printf "${tput_red}MKDIR${tput_reset} $create_folder"
         fi
-        cp $source_file $create_folder
-        echo -e "\t \e[33mCP\e[0m $source_folder/\e[32m$target_file\e[0m" 
-        echo -e "\t \e[90m====>\e[0m $create_folder"
+        `which cp` $source_file $create_folder
+        printf "\e\t ${tput_yellow}CP${tput_reset} $source_folder/`tput_green $target_file`\n" 
+        printf "\e\t ${tput_skyblue} ====>${tput_reset} $create_folder\n"
         index=`expr $index + 1`
     fi
     ProgressBar $index $count
