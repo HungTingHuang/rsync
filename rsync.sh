@@ -43,9 +43,9 @@ fi
 
 function ProgressBar {
 # Process data
-    local _progress=(${1}*100/${2}*100)/100
-    local _done=(${_progress}*4)/10
-    local _left=40-$_done
+    let local _progress=(${1}*100/${2}*100)/100
+    let local _done=(${_progress}*4)/10
+    let local _left=40-$_done
 # Build progressbar string lengths
     _fill=$(printf "%${_done}s")
     _empty=$(printf "%${_left}s")
@@ -53,7 +53,7 @@ function ProgressBar {
 # 1.2 Build progressbar strings and print the ProgressBar line
 # 1.2.1 Output example:                           
 # 1.2.1.1 Progress : [########################################] 100%ls
-printf "\n\r${_fill// /\#}${_empty// /-}  ${1}/${2} ${_progress}%%\n\r"
+#printf "\n\r${_fill// /\#}${_empty// /-}  ${1}/${2} ${_progress}%%\n\r"
 
 }
 
@@ -76,8 +76,8 @@ for file in $list; do
             printf "${tput_red}MKDIR${tput_reset} $create_folder"
         fi
         `which cp` $source_file $create_folder
-        printf "\e\t ${tput_yellow}CP${tput_reset} $source_folder/`tput_green $target_file`\n" 
-        printf "\e\t ${tput_skyblue} ====>${tput_reset} $create_folder\n"
+        printf "\e\t ${tput_yellow}CP${tput_reset} $source_folder/${tput_green}$target_file${tput_reset}\n" 
+        printf "\e\t ${tput_skyblue}====>${tput_reset} $create_folder\n"
         index=`expr $index + 1`
     fi
     ProgressBar $index $count
