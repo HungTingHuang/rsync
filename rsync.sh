@@ -100,7 +100,7 @@ for file in $list; do
     source_file=$file
     target_file=${source_file##*/}
 
-    if [ -n target_file ]  &&  [ -f $source_file ]; then
+    if [ -n $target_file ]  &&  [ -f $source_file ]; then
         source_folder=${source_file%/${PATTERM}}"/"
         create_folder=""
         if [ -z $source_folder ] || [ ! -d $source_folder ] ; then
